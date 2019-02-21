@@ -21,7 +21,7 @@ app.config['suppress_callback_exceptions']=True
 #US_STATES_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_usa_states.csv'
 
 #US_AG_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv'
-data=pd.read_excel(open(r'C:\Users\HP\Desktop\data.xlsx','rb'),sheetname ='Master',encoding = 'unicode_escape')
+data=pd.read_excel(open(r'data.xlsx','rb'),sheetname ='Master',encoding = 'unicode_escape')
 datax=data.head(411)
 datax.columns
 datax['flat_cnt']=1
