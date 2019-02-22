@@ -18,6 +18,8 @@ N = 100000
 app = dash.Dash()
 app.config['suppress_callback_exceptions']=True
 
+server = app.server
+
 #US_STATES_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2014_usa_states.csv'
 
 #US_AG_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv'
