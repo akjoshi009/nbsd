@@ -7,5 +7,5 @@ dash-core-components==0.42.1
 dash-renderer==0.18.0
 gunicorn==19.7.1
 flask==0.12
-flask_cors
+flask_cors==3.0.7
 numpy==1.12.0
