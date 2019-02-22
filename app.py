@@ -23,7 +23,7 @@ app.config['suppress_callback_exceptions']=True
 #US_AG_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv'
 
 app.layout = html.Div(
-    html.H1(children='Hello Dash'))
+    html.H1('Hello Dash'))
 
 if __name__ == '__main__':
     app.run_server()
