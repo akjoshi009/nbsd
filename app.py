@@ -168,7 +168,7 @@ def df_to_table2(df):
         ])            
     
 a_x = html.Div(children=[
-    html.H2(children='''Projects Sales Comparision''',style={'margin':'25px'}),
+    html.H2(children='''Projects Sales Comparision''',style={'text-align':'center','margin':'2%'}),
        dbc.Card(
             [
                 
@@ -178,44 +178,43 @@ a_x = html.Div(children=[
 
                     ]
                 ),
-            ],color="dark",inverse=True,style={'margin':'2%'}
+            ],color="dark",inverse=True,style={'margin-top':'2%','margin-left':'15%','margin-right':'15%','text-align':'center'}
         ),
   dbc.Card(
             [
                 
                 dbc.CardBody(
-                    [
-                        html.Div([ 
-      html.Div([
+                    [html.Div([
     dcc.Graph(
         id='col1',
         figure={
             'data': [trace,],
-            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=400,height=300)  #, barmode='stack'
-        })], style={'width': '20%','display': 'inline-block'}),
-      html.Div([
-    dcc.Graph(
-        id='col2',
-        figure={
-            'data': [trace1],
-            'layout':go.Layout(title='Agreement Value',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=400,height=300) #, barmode='stack'
-        })
-    ], style={'width': '20%','display': 'inline-block'}),
- html.Div([
-    dcc.Graph(  
-        id='col3',
-        figure={
-            'data': [trace2],
-            'layout':go.Layout(title='AV for Brokerage',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=400,height=300)  #, barmode='stack'
-        })], style={'width': '20%','display': 'inline-block'}),
-     
-                    
-], style={'backgroundColor':'white','width': '100%','display': 'inline-block'})  ,
+            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=20)))  #, barmode='stack'
+        })], style={'width': '94%','text-size':'30px'})
+                            
+                            ]
+                ),
+            ],style={'width': '44%','margin':'2%','display': 'inline-block'}
+        ),
+dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         html.Div([
+              dcc.Graph(
+              id='col2',
+            figure={
+                'data': [trace,],
+            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=20)))  #, barmode='stack'
+        })], style={'width': '94%',})
 
                     ]
                 ),
-            ],style={'margin':'2%'}
-        )              
+            ],style={'width': '44%','margin':'2%','display': 'inline-block'}
+        )
+
+              
   
 ])
 # Create a Dash layout
