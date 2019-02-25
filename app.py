@@ -34,7 +34,7 @@ from dash.dependencies import Input, Output
 
 from plotly import graph_objs as go
 
-N = 1000
+N = 100
 
 
 
