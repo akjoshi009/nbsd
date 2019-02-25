@@ -27,6 +27,8 @@ import dash
 import dash_html_components as html
 
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
+
 
 from dash.dependencies import Input, Output
 
@@ -163,9 +165,24 @@ def df_to_table2(df):
         ])            
     
 a_x = html.Div(children=[
-    html.H2(children='''Projects Sales comparision''',style={'padding-left':'20px'}),       
-            html.Div([df_to_table(new_data)], style={'text-align':'center','width': '50%','display': 'inline-block'}),
-  html.Div([ 
+    html.H2(children='''Projects Sales Comparision''',style={'margin':'25px'}),
+       dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                          html.Div([df_to_table(new_data)], style={'text-align':'center','width': '50%','display': 'inline-block'}),
+
+                    ]
+                ),
+            ],color="dark",inverse=True,style={'margin':'2%'}
+        ),
+  dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                        html.Div([ 
       html.Div([
     dcc.Graph(
         id='col1',
@@ -188,43 +205,37 @@ a_x = html.Div(children=[
             'data': [trace2],
             'layout':go.Layout(title='AV for Brokerage',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=400,height=300)  #, barmode='stack'
         })], style={'width': '20%','display': 'inline-block'}),
-     html.Div([
-    dcc.Graph(
-        id='col4',
-        figure={
-            'data': [trace3],
-            'layout':go.Layout(title='Brokerage Amount',legend=dict(x=-0.5,y=-0.9,font=dict(size=9)),width=380,height=300)  #, barmode='stack'
-        })], style={'width': '20%','display':'inline-block'}),
-     html.Div([
-    dcc.Graph(
-        id='col5',
-        figure={
-            'data': [trace4],
-            'layout':go.Layout(title='Sale Area by Project',legend=dict(x=-0.5,y=-0.9,font=dict(size=9)),width=380,height=300)  #, barmode='stack'
-        })], style={'width': '20%','display': 'inline-block'}),                 
-], style={'backgroundColor':'white','width': '100%','display': 'inline-block'})
+     
+                    
+], style={'backgroundColor':'white','width': '100%','display': 'inline-block'})  ,
+
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        )              
+  
 ])
 # Create a Dash layout
 app.layout = html.Div([
     html.Div(
-        html.H1('NBSD Intelligent Reporting',style={'textAlign':'center','color':'#7FDBFF'})
+        html.H1('NBSD Intelligent Reporting',style={'textAlign':'center','color':'#7FDBFF','margin':'2%'})
         ),
-        dcc.Tabs(id='tabs', value='Tab1', children=[
-        dcc.Tab(label='Sales Report', id='tab1',style={'textAlign':'center','fontWeight': 'bold','color':'#7FDBFF'},value='Tab1'),
-        dcc.Tab(label='Projects Collation', id='tab2', value='Tab2',style={'textAlign':'center','fontWeight': 'bold','color':'#7FDBFF'}),
-        dcc.Tab(label='Summary Report', id='tab3', value='Tab3',style={'textAlign':'center','fontWeight': 'bold','color':'#7FDBFF'}),
-        dcc.Tab(label='Pivot Report', id='tab4', value='Tab4',style={'textAlign':'center','fontWeight': 'bold','color':'#7FDBFF'})
-        ]),
+        dbc.Tabs([
+        dbc.Tab(label='Sales Report', tab_id='tab1'),
+        dbc.Tab(label='Projects Collation', tab_id='tab2'),
+        dbc.Tab(label='Summary Report', tab_id='tab3'),
+        dbc.Tab(label='Pivot Report', tab_id='tab4'),
+        ],id='tabs', active_tab='tab1'),
         html.Div(id='tabs-content')
 
 ])
 @app.callback(Output('tabs-content', 'children'),
-              [Input('tabs', 'value')])
+              [Input('tabs', 'active_tab')])
 def render_content(tab):
-    if tab == 'Tab1':
+    if tab == 'tab1':
         
         return html.Div(
-                [html.H2('Sales Report',style={'padding':'20px','color':'#7FDBFF'}),
+                [html.H2('Sales Report',style={'margin':'1.8%','color':'#7FDBFF'}),
             dcc.Dropdown(
                 id="prgt",
                 options=[{
@@ -233,17 +244,16 @@ def render_content(tab):
                 } for i in projets],
                 value='Parkwest',
                 style={'width': '50%',
-               'display': 'inline-block','padding-left':'10px'}
+               'display': 'inline-block','padding-left':'1.8%'}
                 ),
            html.Div(id='update')
                
              ])
-    elif tab == 'Tab2':
+    elif tab == 'tab2':
         return a_x
     
-    elif tab == 'Tab3':
+    elif tab == 'tab3':
         return html.Div([
-            
             dcc.Dropdown(
                 id="sumry",
                 options=[{
@@ -251,13 +261,22 @@ def render_content(tab):
                     'value': i
                 } for i in projets],
                 value='Parkwest',
-                style={'width': '55%',
-               'display': 'inline-block','padding-left':'35%','padding-top':'10px','position':'relative'}
+                style={'width': '50%','display': 'inline-block','margin-left':'1.6%','margin-top':'10px'}
                 ),
-           html.Div(id='update2')
+    dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         html.Div(id='update2')
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        )       
+   
     
         ])
-    elif tab == 'Tab4':
+    elif tab == 'tab4':
         return html.Div([
             html.H3('Configuration Wise sales',style={'padding':'20px','font-weight': 'bold','color':'#7FDBFF'}),
             dcc.Graph(
@@ -283,50 +302,99 @@ def render_content(tab):
 
 def updategraphs(prgt):
     datax=data[data['Project']==prgt]
-    return [html.H2('Configuration Wise sales',style={'padding':'20px','color':'#7FDBFF'}),                                          
-             dcc.Graph(
+    return [ 
+            dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         dcc.Graph(
                 id='graph-1-tabs',
                 figure={
                     'data': [{
                         'x': datax['Configuration'],
                         'y': datax['Agreement Value'],
                         'type': 'bar'
-                    }]
+                       
+                    }],
+                  'layout': {
+                'title': 'Configuration Wise Sales'
+            }
                 }
-            ),
-            html.H2('Tower Wise sales',style={'padding':'20px','color':'#7FDBFF'}),
-            dcc.Graph(
+            )
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        ),
+    dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         dcc.Graph(
                 id='graph-10-tabs',
                 figure={
                     'data': [{
                         'x': datax['Tower'],
                         'y': datax['Agreement Value'],
                         'type': 'bar'
-                    }]
+                    }],
+                'layout': {
+                'title': 'Configuration Wise Sales'
                 }
-            ),
-            html.H2('Source Wise sales',style={'padding':'20px','color':'#7FDBFF'}),
-            dcc.Graph(
+                }
+            )
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        )
+    ,
+         dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         dcc.Graph(
                 id='graph-11-tabs',
                 figure={
                     'data': [{
                         'x': datax['Source'],
                         'y': datax['Agreement Value'],
                         'type': 'bar'
-                    }]
+                    }],
+                 'layout': {
+                'title': 'Configuration Wise Sales'
                 }
-            ),
-            html.H2('Tower Wise sales',style={'padding':'20px','color':'#7FDBFF'}),
-            dcc.Graph(
+    
+                }
+            )
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        ),
+           dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                      dcc.Graph(
                 id='graph-12-tabs',
                 figure={
                     'data': [{
-                        'x': datax['CP Name'],
+                        'x': datax['Source'],
                         'y': datax['Agreement Value'],
                         'type': 'bar'
-                    }]
+                    }],
+                'layout': {
+                'title': 'Configuration Wise Sales'
                 }
-            )]
+                }
+            )   
+                    ]
+                ),
+            ],style={'margin':'2%'}
+        )
+            ]
     
 
     
@@ -337,9 +405,19 @@ def updatesumry(sumry):
     datax=new_data[new_data['Project']==sumry]
     datax.drop('Project', axis=1, inplace=True)
     
-    return [html.Div([df_to_table2(datax)], style={'text-align':'center','width': '100%','display': 'inline-block','padding-left':'25%'}
-            ),
-  html.Div([
+    return [
+            dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         html.Div([df_to_table2(datax)], style={'text-align':'center','width': '100%','display': 'inline-block','padding-left':'25%'}),
+
+                    ]
+                ),
+            ],color="dark",inverse=True,style={'margin':'2%'}
+        ),
+              html.Div([
     dcc.Graph(
         id='col1',
         figure={
@@ -353,12 +431,34 @@ def updatesumry(sumry):
             'data': [trace1],
             'layout':go.Layout(title='Agreement Value',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400) #, barmode='stack'
         })
-    ], style={'width': '40%','display': 'inline-block'})
-            
-            ]
-
-
-
+    ], style={'width': '40%','display': 'inline-block'}),
+     html.Div([
+    dcc.Graph(
+        id='col3',
+        figure={
+            'data': [trace,],
+            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400)  #, barmode='stack'
+        })], style={'width': '40%','display': 'inline-block'}),
+    
+    html.Div([
+            dcc.Graph(
+                id='graph-12-tabs',
+                figure={
+                    'data': [{
+                        'x': data['Source'],
+                        'y': data['Agreement Value'],
+                        'type': 'bar'
+                        }],
+                     'layout': {
+                'title': 'Dash Data Visualization'
+            }
+                }
+            )],style={'width': '40%','display': 'inline-block'})
+    
+    
+    ]
+    
+  
 
 if __name__ == '__main__':
 
