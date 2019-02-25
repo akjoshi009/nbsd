@@ -34,7 +34,7 @@ from dash.dependencies import Input, Output
 
 from plotly import graph_objs as go
 
-N = 100000
+N = 1000
 
 
 
@@ -56,7 +56,7 @@ server = app.server
 
 #US_AG_URL = 'https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv'
 
-
+c= ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, N)]
 data=pd.read_excel(open(r'data.xlsx','rb'),sheetname ='Master',encoding = 'unicode_escape')
 datax=data.head(411)
 datax.columns
@@ -65,6 +65,9 @@ datax['Agreement_Value']=datax['Agreement Value']
 datax['Sale_Area']=datax['Sale Area']
 datax['AV_for_Brokerage']=datax['AV for Brokerage']
 datax['Brokearge_Amt']=datax['Brokearge Amt']
+
+random_x = np.random.randn(N)
+random_y = np.random.randn(N)
 
 projets=datax.Project.unique()
 def loaddata(text):
@@ -324,7 +327,7 @@ def updategraphs(prgt):
             )
                     ]
                 ),
-            ],style={'margin':'2%'}
+            ],style={'margin':'2%','width':'44%','display': 'inline-block'}
         ),
     dbc.Card(
             [
@@ -334,19 +337,23 @@ def updategraphs(prgt):
                          dcc.Graph(
                 id='graph-10-tabs',
                 figure={
-                    'data': [{
-                        'x': datax['Tower'],
-                        'y': datax['Agreement Value'],
-                        'type': 'bar'
-                    }],
-                'layout': {
-                'title': 'Configuration Wise Sales'
+                    'data': [
+                            go.Scattergl(
+                                    x = datax['Tower'],
+                                    y = datax['Agreement Value'],
+                                    mode = 'markers',
+                                    marker = dict(
+        color = '#FFBAD2',
+        line = dict(width = 1)
+    )
+                                    )],
+                'layout':go.Layout(title='Tower Wise Sale',legend=dict(x=-0.3,y=-0.9,font=dict(size=9))),
                 }
-                }
+                
             )
                     ]
                 ),
-            ],style={'margin':'2%'}
+            ],style={'margin':'2%','width':'44%','display': 'inline-block'}
         )
     ,
          dbc.Card(
@@ -357,20 +364,22 @@ def updategraphs(prgt):
                          dcc.Graph(
                 id='graph-11-tabs',
                 figure={
-                    'data': [{
-                        'x': datax['Source'],
-                        'y': datax['Agreement Value'],
-                        'type': 'bar'
-                    }],
-                 'layout': {
-                'title': 'Configuration Wise Sales'
-                }
+                    'data': [
+                            go.Scatter(
+                                    x = datax['Source'],
+                                    y = datax['Agreement Value'],
+                                    mode = 'markers',
+                                    marker = dict(color = '#FFBAD2',line = dict(width = 1))
+    )],
+                                'layout': {
+                                'title': 'Source Wise Sales'
+                                    }
     
                 }
             )
                     ]
                 ),
-            ],style={'margin':'2%'}
+            ],style={'margin':'2%','width':'44%','display': 'inline-block'}
         ),
            dbc.Card(
             [
@@ -392,7 +401,7 @@ def updategraphs(prgt):
             )   
                     ]
                 ),
-            ],style={'margin':'2%'}
+            ],style={'margin':'2%','width':'44%','display': 'inline-block'}
         )
             ]
     
@@ -406,6 +415,7 @@ def updatesumry(sumry):
     datax.drop('Project', axis=1, inplace=True)
     
     return [
+            
             dbc.Card(
             [
                 
@@ -416,31 +426,23 @@ def updatesumry(sumry):
                     ]
                 ),
             ],color="dark",inverse=True,style={'margin':'2%'}
-        ),
-              html.Div([
+        ), dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         html.Div([
     dcc.Graph(
         id='col1',
         figure={
             'data': [trace,],
             'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400)  #, barmode='stack'
-        })], style={'width': '40%','display': 'inline-block'}),
-      html.Div([
-    dcc.Graph(
-        id='col2',
-        figure={
-            'data': [trace1],
-            'layout':go.Layout(title='Agreement Value',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400) #, barmode='stack'
-        })
-    ], style={'width': '40%','display': 'inline-block'}),
+        })], style={'width': '40%'})
+                    ]
+                ),
+            ],style={'margin':'2%','display': 'inline-block'}
+        ),
      html.Div([
-    dcc.Graph(
-        id='col3',
-        figure={
-            'data': [trace,],
-            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400)  #, barmode='stack'
-        })], style={'width': '40%','display': 'inline-block'}),
-    
-    html.Div([
             dcc.Graph(
                 id='graph-12-tabs',
                 figure={
@@ -453,10 +455,52 @@ def updatesumry(sumry):
                 'title': 'Dash Data Visualization'
             }
                 }
+            )],style={'width': '40%','display': 'inline-block'}),
+    dbc.Card(
+            [
+                
+                dbc.CardBody(
+                    [
+                         html.Div([
+    dcc.Graph(
+        id='colx1',
+        figure={
+            'data': [
+                    go.Scatter(
+                            x = random_x,
+                            y = random_y,
+                            mode = 'markers',
+                            marker=dict(
+        size=16,
+        color = np.random.randn(100), #set color equal to a variable
+        colorscale='Viridis',
+        showscale=True
+    )
+                            )],
+            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=9)),width=600,height=400)  #, barmode='stack'
+        })], style={'width': '40%'})
+                    ]
+                ),
+            ],style={'margin':'2%','display': 'inline-block'}
+        ),
+   
+    html.Div([
+            dcc.Graph(
+                id='graph-13-tabs',
+                figure={
+                    'data': [{
+                        'x': data['Configuration'],
+                        'y': data['Agreement Value'],
+                        'type': 'bar'
+                        }],
+                     'layout': {
+                'title': 'Dash Data Visualization'
+            }
+                }
             )],style={'width': '40%','display': 'inline-block'})
+
+   ]
     
-    
-    ]
     
   
 
