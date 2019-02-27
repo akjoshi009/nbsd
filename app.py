@@ -136,21 +136,51 @@ new_data = grp_by_prj.rename(columns = {"flat_cnt": "Apartment Count",
                              "Brokearge_Amt": "Brokerage Amount" }) 
 
 
+a_bar=dcc.Graph(
+    figure=go.Figure(
+        data=[
+            go.Bar(
+                x=new_data["Project"],
+                y=new_data["Agreement Value"],
+                name='Agreement Value'
+                
+            ),
+            go.Bar(
+                    x=new_data["Project"],
+                    y=new_data["AV for Brokerage"],
+                    name='AV for Brokerage',
+                   
+                )
+            ,
+            go.Bar(
+                    x=new_data["Project"],
+                    y=new_data["Brokerage Amount"],
+                    name="Brokerage Amount"
+                   
+                )
+            
+        ],
+        layout=go.Layout(
+            title='Agreement Value',
+            showlegend=True,font=dict(size=14)
+          
+        )
+    ),
+    id='my-graph'
+)
+
+
 def df_to_table(df):
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in df.columns])] +
-        
-        # Body
-        [
-            html.Tr(
-                [
-                    html.Td(df.iloc[i][col])
-                    for col in df.columns
-                ]
-            )
-            for i in range(len(df))
-        ])
+    return dbc.Table(
+            # Header
+            [html.Thead([html.Tr([html.Th(col) for col in df.columns])],style={'text-align':'left','margin-left':'10%','width':'80%'})] +
+
+            # Body
+            [html.Tbody([html.Tr([html.Td(html.A(df.iloc[i][col]))
+                for col in df.columns])
+                for i in range(len(df))])]
+            ,style={'backgroundColor':'white','text-align':'left','font-size': '16px','color': 'blue','margin-left':'10%','width':'80%'}
+        )
 def df_to_table2(df):
     return html.Table(
         # Header
@@ -168,55 +198,64 @@ def df_to_table2(df):
         ])            
     
 a_x = html.Div(children=[
-    html.H2(children='''Projects Sales Comparision''',style={'text-align':'center','margin':'2%'}),
+    html.H2(children='''Projects Sales Comparision''',style={'margin':'16px','color':'blue'}),
        dbc.Card(
             [
                 
                 dbc.CardBody(
                     [
-                          html.Div([df_to_table(new_data)], style={'text-align':'center','width': '50%','display': 'inline-block'}),
+                          html.Div([df_to_table(new_data)],style={'text-align':'center','width': '60%','display': 'inline-block','margin-left':'19%'}),
 
                     ]
                 ),
-            ],color="dark",inverse=True,style={'margin-top':'2%','margin-left':'15%','margin-right':'15%','text-align':'center'}
+            ],style={'margin':'2%'}
         ),
   dbc.Card(
-            [
-                
-                dbc.CardBody(
-                    [html.Div([
-    dcc.Graph(
-        id='col1',
-        figure={
-            'data': [trace,],
-            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=20)))  #, barmode='stack'
-        })], style={'width': '94%','text-size':'30px'})
-                            
-                            ]
-                ),
-            ],style={'width': '44%','margin':'2%','display': 'inline-block'}
-        ),
-dbc.Card(
+            [dbc.CardBody(
+                        [
+                        html.Div([a_bar], style={'width': '80%','margin-left':'8%'}
+                            ),
+                    ],
+                    ),
+            ], style={'backgroundColor':'white','width': '70%','margin-left':'14%'}
+        ),dbc.Card(
             [
                 
                 dbc.CardBody(
                     [
-                         html.Div([
-              dcc.Graph(
-              id='col2',
-            figure={
-                'data': [trace,],
-            'layout':go.Layout(title='Units Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=20)))  #, barmode='stack'
-        })], style={'width': '94%',})
-
+                        html.Div([
+                            dcc.Graph(
+                                    id='col2',
+                                    figure={
+                                    'data': [trace],
+                                    'layout':go.Layout(title='Unit Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=14))) #, barmode='stack'
+                                    })
+                            ], style={'width': '80%','margin-left':'8%'}
+                            )  
                     ]
                 ),
-            ],style={'width': '44%','margin':'2%','display': 'inline-block'}
+            ],style={'margin':'2%','width': '44%','display':'inline-block'}
+        ),
+          dbc.Card(
+            [dbc.CardBody(
+                        [
+                        
+                           html.Div([
+                            dcc.Graph(  
+                                id='col3',
+                                figure={
+                                'data': [trace4],
+                                'layout':go.Layout(title='Area Sold',legend=dict(x=-0.3,y=-0.9,font=dict(size=14)))  #, barmode='stack'
+                                })], style={'width': '80%','margin-left':'8%'}) 
+                    ]
+                    ),
+            ],style={'margin':'2%','width': '44%','display':'inline-block'}
         )
-
-              
-  
-])
+          
+                                      
+                        
+],style={'margin':'2%'}
+)
 # Create a Dash layout
 app.layout = html.Div([
     html.Div(
